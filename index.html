@@ -1,0 +1,89 @@
+<!DOCTYPE doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+            <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+                <title>
+                    TeX2UTF8
+                </title>
+                <script src="https://kit.fontawesome.com/7194e22a27.js">
+                </script>
+                <script src="map.js">
+                </script>
+                <script src="samples.js">
+                </script>
+                <link href="style.css" rel="stylesheet"/>
+            </meta>
+        </meta>
+    </head>
+</html>
+<body>
+    <div class="main">
+        <h1>
+            LaTeX ⟶ UTF-8
+        </h1>
+        <input autofocus="" id="latexInput" placeholder="Latex formula" required="" type="latex">
+        </input>
+        <span style="font-size:2em">
+            ↓
+        </span>
+        <div>
+            <input id="utf8Output">
+            </input>
+            <a href="#" id="copy">
+                Copy
+            </a>
+        </div>
+        <div id="links">
+            <a href="https://github.com/fKunstner/latex-to-utf8" title="GitHub page">
+                <i class="fab fa-github">
+                </i>
+            </a>
+            <a href="https://github.com/fKunstner/latex-to-utf8/issues/new/choose" title="Report a bug">
+                <i class="fas fa-bug">
+                </i>
+            </a>
+        </div>
+    </div>
+</body>
+<script>
+    var latexInput = document.getElementById("latexInput");
+    var utf8Output = document.getElementById("utf8Output");
+    var copyButton = document.getElementById("copy");
+
+    function latex2utf8(input) {
+        Object.keys(map).forEach(function(key) {
+            input = input.split(key).join(map[key]);
+        });
+        return input
+    }
+
+    function update(str) {
+        utf8Output.value = latex2utf8(str);
+    }
+
+    function setRandomSample() {
+        var sample = samples[Math.floor(Math.random()*samples.length)];
+        latexInput.value = sample;
+        update(sample)
+    }
+
+    function parse() {
+        var input = latexInput.value;
+        update(input)
+    }
+
+    function copyToClipboard() {
+        utf8Output.select();
+        document.execCommand("copy");
+        console.log(utf8Output.value)
+    }
+
+    function load() {
+        latexInput.addEventListener("keyup", parse)
+        copyButton.addEventListener("click", copyToClipboard)
+        setRandomSample()
+    }
+
+    window.addEventListener('DOMContentLoaded', load, false);
+</script>
