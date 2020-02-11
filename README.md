@@ -13,7 +13,7 @@ to write simple [UTF-8](https://en.wikipedia.org/wiki/UTF-8) math using LaTeX.
 |`\partial^2\u/\partial\x^2 + \partial^2\u/\partial\y^2 = 0`|`𝜕²𝑢/𝜕𝑥² + 𝜕²𝑢/𝜕𝑦² = 0`|
 |`\mathcal{N}(\x; \mu, \sigma^2) = exp(-(\x - \mu)^2/\sigma^2)/\sqrt\overline2\overline\pi\sigma`|`𝒩(𝑥; 𝜇, 𝜎²) = exp(−(𝑥 − 𝜇)²/𝜎²)/√̅2̅𝜋𝜎`|
 
-This is a quick and dirty replacement of [known commands](https://fkunstner.github.io/latex-to-utf8/map.json)
+This is a quick and dirty replacement of [known commands](https://fkunstner.github.io/latex-to-utf8/map.js)
 to matching UTF-8 symbols.
 Commands that "do something" rather than produce a symbol, like `\frac{}{}` or `\begin{matrix}...\end{matrix}`, do not work.
 
