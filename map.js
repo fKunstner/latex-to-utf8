@@ -57,7 +57,6 @@ var map = {
     "\\ominus": "⊖",
     "\\otimes": "⊗",
     "\\odot": "⊙",
-    "\\cdot": "⋅",
     "\\diamond": "⋄",
     "\\star": "⋆",
     "\\dagger": "†",
@@ -656,7 +655,6 @@ var map = {
     "\\bigcup": "⋃",
     "\\diamond": "⋄",
     "\\smwhtdiamond": "⋄",
-    "\\cdot": "⋅",
     "\\star": "⋆",
     "\\divideontimes": "⋇",
     "\\bowtie": "⋈",
@@ -3710,4 +3708,5 @@ var map = {
     "\\X": "𝑋",
     "\\Y": "𝑌",
     "\\Z": "𝑍",
+    "\\cdot": "⋅",
 }
