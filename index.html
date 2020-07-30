@@ -1,87 +1,245 @@
 <!DOCTYPE doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-            <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-                <title>
-                    TeX2UTF8
-                </title>
-                <script src="https://kit.fontawesome.com/7194e22a27.js">
-                </script>
-                <script src="map.js">
-                </script>
-                <script src="samples.js">
-                </script>
-                <link href="style.css" rel="stylesheet"/>
-            </meta>
-        </meta>
-    </head>
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <title>
+        TeX2UTF8
+    </title>
+    <script src="https://kit.fontawesome.com/7194e22a27.js">
+    </script>
+    <script src="map.js">
+    </script>
+    <script src="samples.js">
+    </script>
+    <link href="style.css" rel="stylesheet"/>
+    </meta>
+    </meta>
+</head>
 </html>
 <body>
-    <div class="main">
-        <h1>
-            LaTeX ⟶ UTF-8
-        </h1>
-        <input autofocus="" id="latexInput" placeholder="Latex formula" required="" type="latex">
-        </input>
+<div class="main">
+    <h1>
+        LaTeX ⟶ UTF-8
+    </h1>
+
+    <div id="mode-buttons">
+        <a href="#snippet" id="snippet-button" class="button active">
+            Snippet
+        </a><a href="#text" id="text-button" class="button inactive">
+        Text
+    </a>
+    </div>
+
+    <div id="snippet-area">
+        <input autofocus="" id="latexInput" placeholder="Latex formula" required="" type="latex"></input>
         <span style="font-size:2em">
             ↓
         </span>
         <div>
-            <input id="utf8Output">
-            </input>
-            <a href="#" id="copy">
+            <input placeholder="UTF8 output" id="utf8Output"></input>
+            <a id="copy" class="button active">
                 Copy
             </a>
         </div>
-        <div id="links">
-            <a href="https://github.com/fKunstner/latex-to-utf8" title="GitHub page">
-                <i class="fab fa-github">
-                </i>
-            </a>
-            <a href="https://github.com/fKunstner/latex-to-utf8/issues/new/choose" title="Report a bug">
-                <i class="fas fa-bug">
-                </i>
+    </div>
+    <div id="text-area">
+        <div id="text-control-area">
+            <label>
+                <input type="checkbox" id="markdown-checkbox" name="markdown" checked>
+                Use <span style="font-family:monospace">`backticks`</span>
+            </label>
+            <a id="copy-text" class="button active">
+                Copy
             </a>
         </div>
+        <textarea placeholder="Text with $...$ and $$...$$ latex math" id="latexInput-text"></textarea>
+        <span style="font-size:2.5em;
+            margin:.25em;
+            vertical-align: top;
+            display: inline-block;">
+            →
+        </span>
+        <textarea placeholder="UTF8 output" id="utf8Output-text"></textarea>
     </div>
+    <div id="links">
+        <a href="https://github.com/fKunstner/latex-to-utf8" title="GitHub page">
+            <i class="fab fa-github">
+            </i>
+        </a>
+        <a href="https://github.com/fKunstner/latex-to-utf8/issues/new/choose" title="Report a bug">
+            <i class="fas fa-bug">
+            </i>
+        </a>
+    </div>
+</div>
 </body>
 <script>
     var latexInput = document.getElementById("latexInput");
     var utf8Output = document.getElementById("utf8Output");
+    var latexInputText = document.getElementById("latexInput-text");
+    var utf8OutputText = document.getElementById("utf8Output-text");
     var copyButton = document.getElementById("copy");
+    var copyTextButton = document.getElementById("copy-text");
+    var snippetButton = document.getElementById("snippet-button");
+    var textButton = document.getElementById("text-button");
+    var snippetArea = document.getElementById("snippet-area");
+    var textArea = document.getElementById("text-area");
+    var markdownCheckbox = document.getElementById("markdown-checkbox");
 
-    function latex2utf8(input) {
-        Object.keys(map).forEach(function(key) {
-            input = input.split(key).join(map[key]);
-        });
+    var autoExpand = function (field, field2) {
+        // Reset field height
+        field.style.height = 'inherit';
+
+        // Get the computed styles for the element
+        var computed = window.getComputedStyle(field);
+
+        // Calculate the height
+        var height = parseInt(computed.getPropertyValue('border-top-width'), 10)
+            + parseInt(computed.getPropertyValue('padding-top'), 10)
+            + field.scrollHeight
+            + parseInt(computed.getPropertyValue('padding-bottom'), 10)
+            + parseInt(computed.getPropertyValue('border-bottom-width'), 10);
+
+        height = Math.max(height, 300);
+        field.style.height = height + 'px';
+        field2.style.height = height + 'px';
+
+    };
+
+    function activateMode(mode) {
+        window.location.hash = mode;
+
+        if (mode === "text") {
+            update(latexInputText, utf8OutputText);
+            textButton.classList.add("active");
+            snippetButton.classList.add("inactive");
+            textButton.classList.remove("inactive");
+            snippetButton.classList.remove("active");
+            snippetArea.style.display = "none";
+            textArea.style.display = "block";
+        } else if (mode === "snippet") {
+            update(latexInput, utf8Output);
+            textButton.classList.add("inactive");
+            snippetButton.classList.add("active");
+            textButton.classList.remove("active");
+            snippetButton.classList.remove("inactive");
+            snippetArea.style.display = "block";
+            textArea.style.display = "none";
+        }
+    }
+
+    function clickTextButton() {
+        activateMode("text")
+    }
+
+    function clickSnippetButton() {
+        activateMode("snippet")
+    }
+
+    function processSubAndSuperscripts(input) {
+        let subscript = /(.*)\_\{([^\{\}]*)\}(.*)/ms;
+        let superscript = /(.*)\^\{([^\{\}]*)\}(.*)/ms;
+        while (true) {
+            let results = input.match(subscript);
+            if (results === null) {
+                break;
+            }
+            input = results[1] + "_" + results[2].split("").join("_") + results[3];
+        }
+        while (true) {
+            let results = input.match(superscript);
+            if (results === null) {
+                break;
+            }
+            input = results[1] + "^" + results[2].split("").join("^") + results[3];
+        }
         return input
     }
 
-    function update(str) {
-        utf8Output.value = latex2utf8(str);
+    function latex2utf8(input, mode) {
+        if (input === undefined) {
+            return "";
+        }
+        if (mode === "#text") {
+            let displaymath_regex = /(.*)\$\$([^$]*)\$\$(.*)/sm;
+            let inlinemath_regex = /(.*)\$([^$]*)\$(.*)/sm;
+            while (true) {
+                let results = input.match(displaymath_regex);
+                if (results === null) {
+                    break;
+                }
+                let delim = markdownCheckbox.checked ? "```" : "";
+                let processed = delim + latex2utf8(results[2], mode = "") + delim;
+                input = results[1] + processed + results[3];
+            }
+            while (true) {
+                let results = input.match(inlinemath_regex);
+                if (results === null) {
+                    break;
+                }
+                let delim = markdownCheckbox.checked ? "`" : "";
+                let processed = delim + latex2utf8(results[2], mode = "") + delim;
+                input = results[1] + processed + results[3];
+            }
+        } else {
+            input = processSubAndSuperscripts(input);
+            Object.keys(map).forEach(function (key) {
+                input = input.split(key).join(map[key]);
+            });
+        }
+        return input
+    }
+
+    function update(from, to) {
+        to.value = latex2utf8(from.value, mode = window.location.hash);
     }
 
     function setRandomSample() {
-        var sample = samples[Math.floor(Math.random()*samples.length)];
-        latexInput.value = sample;
-        update(sample)
+        latexInput.value = samples[Math.floor(Math.random() * samples.length)];
+        latexInputText.value = samplesText[Math.floor(Math.random() * samplesText.length)];
+        update(latexInput, utf8Output);
+        update(latexInputText, utf8OutputText);
     }
 
-    function parse() {
-        var input = latexInput.value;
-        update(input)
+    function parseSnippet() {
+        update(latexInput, utf8Output)
     }
 
-    function copyToClipboard() {
-        utf8Output.select();
+    function parseText() {
+        autoExpand(latexInputText, utf8OutputText)
+        update(latexInputText, utf8OutputText)
+    }
+
+    function copyToClipboard(from) {
+        from.select();
         document.execCommand("copy");
-        console.log(utf8Output.value)
+    }
+
+    function copyToClipboardSnippet() {
+        copyToClipboard(utf8Output)
+    }
+
+    function copyToClipboardText() {
+        copyToClipboard(utf8OutputText)
     }
 
     function load() {
-        latexInput.addEventListener("keyup", parse)
-        copyButton.addEventListener("click", copyToClipboard)
+        var currhash = window.location.hash;
+
+        if (currhash === "#snippet") {
+            activateMode("text")
+        } else if (currhash === "#text") {
+            activateMode("text")
+        }
+
+        latexInput.addEventListener("keyup", parseSnippet);
+        latexInputText.addEventListener("keyup", parseText);
+        copyButton.addEventListener("click", copyToClipboardSnippet);
+        copyTextButton.addEventListener("click", copyToClipboardText);
+        snippetButton.addEventListener("click", clickSnippetButton);
+        textButton.addEventListener("click", clickTextButton);
+        markdownCheckbox.addEventListener("click", parseText);
         setRandomSample()
     }
 

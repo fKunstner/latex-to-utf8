@@ -1,89 +1,165 @@
 html, body {
-  height: 90%;
+    height: 90%;
 }
+
 body {
-  font-family: "Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  font-weight: 400;
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-align: center;
-  align-items: center;
-  background-color: #f0f0f0;
+    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-weight: 400;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    background-color: #f0f0f0;
 }
+
 .main {
-  width: 60%;
-  max-width: 1200px;
-  padding: 15px;
-  margin: auto;
-  text-align: center;
+    width: 80%;
+    max-width: 1200px;
+    padding: 15px;
+    margin: auto;
+    margin-top: 0px;
+    text-align: center;
+}
+
+#latexInput-text {
+    color: #495057;
 }
 #latexInput {
-  text-align: center;
-  width: 100%;
-  font-size: 1.5em;
-  font-family: monospace;
-  margin-top: 50px;
-  margin-bottom: 25px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-  display: block;
-  height: 2.5em;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #495057;
-  background-color: #fff;
-  border: 1px solid #ced4da;
-  border-radius: .25rem;
+    text-align: center;
+    width: 100%;
+    font-size: 1.5em;
+    font-family: monospace;
+    margin-top: 0px;
+    margin-bottom: 25px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    display: block;
+    height: 2.5em;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
 }
+
 #utf8Output {
-  width: 100%;
-  line-height: 2.5em;
-  margin: auto;
-  margin-top:25px;
-  margin-bottom: 100px;
-  text-align: center;
-  font-size: 1.5em;
-  background-color: #ffffff;
-  border: 1px solid #ced4da;
-  border-radius: .25rem;
-  font-family: monospace;
+    width: 100%;
+    line-height: 2.5em;
+    margin: auto;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    text-align: center;
+    font-size: 1.5em;
+    background-color: #ffffff;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    font-family: monospace;
+}
+
+#links {
+    margin-top:50px;
 }
 #links a {
-  font-size:1.5em; 
-  color:#707070;
-  text-decoration: none;
+    font-size: 1.5em;
+    color: #707070;
+    text-decoration: none;
 }
 
+.active {
+    color: #FFFFFF;
+    background-color: #3369ff;
+}
+
+.inactive {
+    color: #3369ff;
+    background-color: #FFFFFF;
+}
+
+.button {
+    display: inline-block;
+    /*padding:0.7em 1.4em;*/
+/*    padding: 0.7em 1.4em;*/
+    margin: 0 0em 0em 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 400;
+    box-shadow: inset 0 -0.6em 0 -0.35em rgba(0, 0, 0, 0.17);
+    text-align: center;
+    padding: 0.9em 1.4em;
+    border-radius: 0.15em;
+}
+
+#text-button {
+    border-radius: 0 0.15em 0.15em 0;
+    padding: 0.5em 1.4em;
+}
+
+#snippet-button {
+    border-radius: 0.15em 0em 0em 0.15em;
+    padding: 0.5em 1.4em;
+}
 
 #copy {
- display:inline-block;
- padding:0.7em 1.4em;
- margin:0 0.3em 0.3em 0;
- border-radius:0.15em;
+    position: relative;
+    margin-left: 101%;
+    float:right;
+    position:relative;
+    left:90px;
+    top:-75px;
+}
 
- box-sizing: border-box;
- text-decoration:none;
- text-transform:uppercase;
- font-weight:400;
- color:#FFFFFF;
- background-color:#3369ff;
- box-shadow:inset 0 -0.6em 0 -0.35em rgba(0,0,0,0.17);
- text-align:center;
+#copy:active {
+    top: -74px;
+}
+#copy:hover {
+    background-color: #4379ff;
+}
 
- position:relative;
- margin-left:101%;
- position:relative;
- top:-148px;
+#markdown-checkbox {
+    width: 20px;
+    height: 20px;
 }
-#copy:hover{
- background-color:#4379ff;
+label {
+    font-size: 1.25em;
+    margin-right: 25px;
 }
-#copy:active{
- top:-146px;
+#text-control-area {
+    text-align: right;
+    padding: 5px;
 }
-@media all and (max-width:30em){
- #copy {
-  display:block;
-  margin:0.4em auto;
- }
+#copy-text {
+}
+
+#copy-text:active {
+    top: -74px;
+}
+#copy-text:hover {
+    background-color: #4379ff;
+}
+
+#snippet-area {
+    display: block;
+    margin-top: 50px;
+}
+#text-area {
+    display: none;
+}
+textarea {
+    resize: none;
+    width: 47%;
+    height: 300px;
+    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-weight: 400;
+    font-size: 1.25em;
+    padding: 1em;
+}
+
+
+@media all and (max-width: 30em) {
+    #copy {
+        display: block;
+        margin: 0.4em auto;
+    }
 }

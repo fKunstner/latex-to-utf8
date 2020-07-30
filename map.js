@@ -701,6 +701,7 @@ var map = {
     "\\ntrianglelefteq": "⋬",
     "\\ntrianglerighteq": "⋭",
     "\\vdots": "⋮",
+    "\\cdot": "⋅",
     "\\cdots": "⋯",
     "\\unicodecdots": "⋯",
     "\\iddots": "⋰",
@@ -3710,5 +3711,4 @@ var map = {
     "\\X": "𝑋",
     "\\Y": "𝑌",
     "\\Z": "𝑍",
-    "\\cdot": "⋅",
 }
